@@ -1,0 +1,18 @@
+tr.githubPagesHighlighted{
+    background-color: #FCFFA8;
+}
+
+#fileBrowser{
+    width: 30%;
+    height: 100%;
+    display: inline-block;
+    vertical-align: top;
+    overflow: scroll;
+}
+#fileViewer{
+    width: 70%;
+    height: 100%;
+    display: inline-block;
+    vertical-align: top;
+    overflow: scroll;
+}
