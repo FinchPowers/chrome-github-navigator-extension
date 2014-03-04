@@ -8,12 +8,12 @@ function cleanFilesList(fileList){
 
 function init(){
     $(".wrapper, .container").hide();
-    cleanFilesList(".bubble.files-bubble");
     $("body").append(
         "<div id='fileBrowser'>"
         + $(".bubble.files-bubble").html() 
         + "</div>"
         + "<div id='fileViewer'></div>");
+    cleanFilesList($("#fileBrowser"));
     $("#fileBrowser").parents().css("height", "100%");
 
     $("#fileBrowser").on("click", "a", function(){
@@ -55,11 +55,10 @@ function init(){
                     var text;
                     if($(html).find(".file-code.file-diff.tab-size-8").size()){
                         //standard code viewing pane
-                        text = $(html).find(".file-code.file-diff.tab-size-8").html();
-                    }else if($(html).find(".blob.instapaper_body")){
+                        text = $(html).find(".file-code.file-diff.tab-size-8")
+                               .html();
+                    }else if($(html).find(".blob.instapaper_body").size()){
                         //markdown
-                        console.log($(html).find(".blob.instapaper_body"));
-                        console.log($(html).find(".blob.instapaper_body").html())
                         text = $(html).find(".blob.instapaper_body").html();
                     }else if($(html).find(".blob-wrapper").size()){
                         //images
@@ -77,7 +76,13 @@ function init(){
 }
 
 if($("#fileBrowser").size()){
-
+    if($("#fileBrowser:visible").size()){
+        $("#fileBrowser, #fileViewer").hide();
+        $(".wrapper, .container").show();
+    }else{
+        $("#fileBrowser, #fileViewer").show();
+        $(".wrapper, .container").hide();
+    }
 }else{
     init();
 }
