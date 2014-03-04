@@ -104,16 +104,22 @@ function init(){
     $("#fileBrowser").parents().css("height", "100%");
 
     $("#fileBrowser").on("click", "a", fileBrowserOnClick);
+    window.history.pushState( {"ghNavigatorUrl" : ""}, "", "");
     window.onpopstate = function(event){
-        if(event.state == null || event.state["ghNavigatorUrl"] == undefined){
-            disableFileBrowser();
-        }else{
-            if(!$("#fileBrowser:visible").size()){
-                enableFileBrowser();
+        if(event.state != null){
+            if(event.state["ghNavigatorUrl"] == ""){
+                disableFileBrowser();
+            }else{
+                if(!$("#fileBrowser:visible").size()){
+                    enableFileBrowser();
+                }
+                url = event.state["ghNavigatorUrl"].replace(/\//g, "\\/")
+                    .replace(/\./g, "\\.");
+                fileAction($("#fileBrowser").find("a[href=" + url + "]"), false);
             }
-            url = event.state["ghNavigatorUrl"].replace(/\//g, "\\/")
-                .replace(/\./g, "\\.");
-            fileAction($("#fileBrowser").find("a[href=" + url + "]"), false);
+        }else{
+            // clicking over a file line
+            return false;
         }
     }
 }
