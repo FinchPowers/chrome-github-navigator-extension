@@ -4,9 +4,6 @@ function cleanFilesList(fileList){
     if($(fileList).find("tr:first a:first").html() == ".."){
         $(fileList).find("tr:first").remove()
     }
-
-    //FIXME Sometimes the following lines doesn't seem to work
-    $(fileList).find("td.content").nextAll().remove();
 }
 
 
