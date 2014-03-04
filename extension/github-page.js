@@ -36,10 +36,6 @@ $("#fileBrowser").on("click", "a", function(){
                 cleanFilesList(html);
                 text = $(html).html();
                 $(anchor).parents("tr:first").next().find("td").html(text);
-                if($("td.content:first").size()){
-                    //Bug counter where cleanup doesn't entirely work
-                    $("td.content").nextAll().remove();
-                }
             });
         }
     } else if ($(icon_span).hasClass("octicon-file-submodule")) {
@@ -58,9 +54,18 @@ $("#fileBrowser").on("click", "a", function(){
             $.get(href, function(html){
                 var text;
                 if($(html).find(".file-code.file-diff.tab-size-8").size()){
+                    //standard code viewing pane
                     text = $(html).find(".file-code.file-diff.tab-size-8").html();
                 }else if($(html).find(".blob.instapaper_body")){
+                    //markdown
+                    console.log($(html).find(".blob.instapaper_body"));
+                    console.log($(html).find(".blob.instapaper_body").html())
                     text = $(html).find(".blob.instapaper_body").html();
+                }else if($(html).find(".blob-wrapper").size()){
+                    //images
+                    text = $(html).find(".blob-wrapper").html();
+                }else{
+                    throw "Cannot handle the selected resource";
                 }
                 $("#fileViewer").html("<table>" + text + "</table>");
                 $(anchor).data("cachedFile", text);
