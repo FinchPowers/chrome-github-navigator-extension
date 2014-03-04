@@ -4,6 +4,7 @@ chrome-github-navigator-extension
 :Version: 0.2.0
 :Author: François-Michel L'Heureux
 :License: LGPL
+:Store page: https://chrome.google.com/webstore/detail/github-files-navigator-co/ealmgoficfcdjefaleanohkikgcjigio
 
 
 0.2.0
