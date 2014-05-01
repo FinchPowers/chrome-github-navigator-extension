@@ -1,7 +1,7 @@
 chrome-github-navigator-extension
 =================================
 :Description: A chrome extension that adds an option to change github files list into an explorer like window.
-:Version: 0.2.2
+:Version: 0.2.3
 :Author: François-Michel L'Heureux
 :License: LGPL
 :Store page: https://chrome.google.com/webstore/detail/github-files-navigator-co/ealmgoficfcdjefaleanohkikgcjigio
