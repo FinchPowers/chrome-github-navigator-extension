@@ -3,7 +3,7 @@
 
   "name": "Github files navigator conversion",
   "description": "Alters github.com html + javascript to allow files browsing in a file browser fashion.",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "author" : "Francois-Michel L'Heureux",
   "browser_action": {
     "default_icon": "images/m128x128.png"

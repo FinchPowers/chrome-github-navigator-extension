@@ -1,3 +1,7 @@
+var listingDivSelector = ".file-wrap";
+var statesStack = [];
+var current = null;
+
 function cleanFilesList(fileList){
     $(fileList).find(".commit.commit-tease.js-details-container").remove();
     $(fileList).find(".branch-infobar").remove();
@@ -7,10 +11,15 @@ function cleanFilesList(fileList){
 }
 
 function updateUrl(anchor){
+    url = $(anchor).attr("href");
     window.history.pushState(
-        {"ghNavigatorUrl" : $(anchor).attr("href")},
+        {"ghNavigatorUrl" : url},
         $(anchor).attr("title"),
-        $(anchor).attr("href"))
+        $(anchor).attr("href"));
+    if(current != null){
+        statesStack.push(current);
+    }
+    current = url;
 }
 
 function fileBrowserOnClick(){
@@ -22,6 +31,7 @@ function fileAction(anchor, pushState){
     var icon_span = $(anchor).parents("tr:first").find("td:first span");
     var href = $(anchor).attr("href");
     if ($(icon_span).hasClass("octicon-file-directory")){
+        console.log("A");
         if($(anchor).parents("tr:first").next().hasClass("ghExtensionExtend")){
             //Already exists
             $(anchor).parents("tr:first").next().toggle();
@@ -33,16 +43,18 @@ function fileAction(anchor, pushState){
                 + "</tr>");
             $.get(href, function(html){
 
-                html = $(html).find(".bubble.files-bubble");
+                html = $(html).find(listingDivSelector);
                 cleanFilesList(html);
                 text = $(html).html();
                 $(anchor).parents("tr:first").next().find("td").html(text);
             });
         }
     } else if ($(icon_span).hasClass("octicon-file-submodule")) {
+        console.log("B");
         //Nav out to the submodule
         return true;
     } else {
+        // Opening a file
         if(pushState){
             updateUrl(anchor);
         }
@@ -97,7 +109,7 @@ function init(){
     $(".wrapper, .container").hide();
     $("body").append(
         "<div id='fileBrowser'>"
-        + $(".bubble.files-bubble").html() 
+        + $(listingDivSelector).html()
         + "</div>"
         + "<div id='fileViewer'></div>");
     cleanFilesList($("#fileBrowser"));
@@ -106,21 +118,15 @@ function init(){
     $("#fileBrowser").on("click", "a", fileBrowserOnClick);
     window.history.pushState( {"ghNavigatorUrl" : ""}, "", "");
     window.onpopstate = function(event){
-        if(event.state != null){
-            if(event.state["ghNavigatorUrl"] == ""){
-                disableFileBrowser();
-            }else{
-                if(!$("#fileBrowser:visible").size()){
-                    enableFileBrowser();
-                }
-                url = event.state["ghNavigatorUrl"].replace(/\//g, "\\/")
+        if($("#fileBrowser:visible").size()){
+            if(statesStack.length){
+                var url = statesStack.pop().replace(/\//g, "\\/")
                     .replace(/\./g, "\\.");
-                fileAction($("#fileBrowser").find("a[href=" + url + "]"), false);
+                fileAction($("#fileBrowser").find("a[href=" + url + "]"),
+                           false);
             }
-        }else{
-            // clicking over a file line
-            return false;
         }
+        return false;
     }
 }
 
